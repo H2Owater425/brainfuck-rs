@@ -71,7 +71,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 	if let Some(unwraped_reader) = configuration.reader {
 		reader = unwraped_reader;
 	} else {
-		print!("{}", HELP_MESSAGE);
+		println!("{}", HELP_MESSAGE);
 
 		exit(1);
 	}
