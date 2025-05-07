@@ -28,7 +28,7 @@ impl Parser {
 		}
 	}
 
-	pub fn parse(self: &mut Self, stopper: Option<Token>) -> Result<Vec<Operation>, Box<dyn Error>> {
+	pub fn parse(self: &mut Self, mut stopper: Option<Token>) -> Result<Vec<Operation>, Box<dyn Error>> {
 		let mut operations: Vec<Operation> = Vec::new();
 
 		while self.index < self.length {
@@ -73,6 +73,8 @@ impl Parser {
 				Token::Output => operations.push(Operation::Output),
 				Token::JumpIfZero => {
 					if stopper == Some(Token::JumpIfZero) {
+						stopper = None;
+
 						break;
 					}
 					
@@ -82,6 +84,8 @@ impl Parser {
 				},
 				Token::JumpIfNotZero => {
 					if stopper == Some(Token::JumpIfNotZero) {
+						stopper = None;
+
 						break;
 					}
 
@@ -92,6 +96,10 @@ impl Parser {
 			}
 
 			self.index += 1;
+		}
+
+		if stopper != None {
+			return Err("Jump instruction must be closed".into());
 		}
 
 		// TODO: More optimization tweaks
