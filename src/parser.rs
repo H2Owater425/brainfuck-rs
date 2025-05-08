@@ -30,6 +30,7 @@ impl Parser {
 
 	pub fn parse(self: &mut Self, mut stopper: Option<Token>) -> Result<Vec<Operation>, Box<dyn Error>> {
 		let mut operations: Vec<Operation> = Vec::new();
+		let is_start: bool = stopper == None;
 
 		while self.index < self.length {
 			match self.tokens[self.index] {
@@ -102,26 +103,29 @@ impl Parser {
 			return Err("Jump instruction must be closed".into());
 		}
 
+		let mut optimized_operations: Vec<Operation> = Vec::new();
+		let mut index: usize = 0;
+
 		// TODO: More optimization tweaks
 
 		// Token::JumpIfNotZero is start of code
-		if let Some(Operation::Jump(is_zero, inner_operations)) = operations.first() {
-			if stopper.is_none() && inner_operations.is_empty() {
-				return Ok(if *is_zero {
-					operations[1..].to_vec()
+		if let Some(Operation::Jump(is_zero, _)) = operations.first() {
+			if is_start {
+				if *is_zero {
+					index = 1;
 				} else {
-					Vec::new()
-				});
+					return Ok(optimized_operations);
+				}
 			}
 		}
 
-		let mut optimized_operations: Vec<Operation> = Vec::new();
-
-		for operation in operations {
-			match operation {
+		while index < operations.len() {
+			match &operations[index] {
 				Operation::MovePointer(0) | Operation::IncreaseValue(0) => continue,
-				operation => optimized_operations.push(operation),
+				operation => optimized_operations.push(operation.clone()),
 			}
+
+			index += 1
 		}
 
 		Ok(optimized_operations)
