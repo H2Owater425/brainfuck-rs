@@ -66,17 +66,11 @@ fn main() -> Result<(), Box<dyn Error>> {
 		break;
 	}
 
-	let reader: Box<dyn ReadWrite>;
-
-	if let Some(unwraped_reader) = configuration.reader {
-		reader = unwraped_reader;
-	} else {
+	let mut lexer: Lexer<Box<dyn ReadWrite>> = Lexer::new(configuration.reader.unwrap_or_else(|| {
 		println!("{}", HELP_MESSAGE);
-
+		
 		exit(1);
-	}
-
-	let mut lexer: Lexer<Box<dyn ReadWrite>> = Lexer::new(reader)?;
+	}))?;
 
 	let tokens: Vec<Token> = lexer.tokenize()?;
 	
