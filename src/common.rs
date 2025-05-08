@@ -15,4 +15,4 @@ Options:
 -V     : print the Brainfuck-rs version number and exit (also --version)
 
 Arguments:
-file                     : program read from script file"#;
+file   : program read from script file"#;
