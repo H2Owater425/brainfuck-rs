@@ -25,7 +25,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 		if configuration.reader.is_none() {
 			if argument.starts_with("-") {
 				match argument.as_str() {
-					"-c" => {
+					"-c" | "--code" => {
 						if let Some(code) = arguments.next() {
 							configuration.reader = Some(Box::new(Cursor::new(code.bytes().collect::<Vec<u8>>())));
 		
@@ -34,12 +34,12 @@ fn main() -> Result<(), Box<dyn Error>> {
 		
 						return Err("Argument must exist after -c option".into());
 					},
-					"-h" | "-?" => {
+					"-h" | "--help" | "-?" => {
 						println!("{}", HELP_MESSAGE);
 
 						return Ok(());
 					},
-					"-V" => {
+					"-V" | "--version" => {
 						println!("Brainfuck-rs {}", VERSION);
 
 						return Ok(());
