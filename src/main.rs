@@ -11,7 +11,6 @@ mod common;
 
 struct Configuration {
 	reader: Option<Box<dyn ReadWrite>>,
-	is_file: bool,
 	is_verbose: bool
 }
 
@@ -19,7 +18,6 @@ fn main() -> Result<(), Box<dyn Error>> {
 	let mut arguments: Skip<Args> = args().skip(1);
 	let mut configuration: Configuration = Configuration {
 		reader: None,
-		is_file: true,
 		is_verbose: false
 	};
 
@@ -30,7 +28,6 @@ fn main() -> Result<(), Box<dyn Error>> {
 					"-c" => {
 						if let Some(code) = arguments.next() {
 							configuration.reader = Some(Box::new(Cursor::new(code.bytes().collect::<Vec<u8>>())));
-							configuration.is_file = true;
 		
 							continue;
 						}
