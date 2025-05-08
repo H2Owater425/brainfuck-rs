@@ -72,7 +72,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 	let tokens: Vec<Token> = lexer.tokenize()?;
 	
 	if configuration.is_verbose {
-		println!("{:#?}", tokens);
+		print!("{:#?}\n\n", tokens);
 	}
 
 	let mut parser: Parser = Parser::new(tokens);
@@ -80,7 +80,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 	let operations: Vec<parser::Operation>= parser.parse(None)?;
 
 	if configuration.is_verbose {
-		println!("{:#?}", operations);
+		print!("{:#?}\n", operations);
 	}
 
 	let mut interpreter: Interpreter = Interpreter::new(&operations, configuration.is_verbose);

@@ -69,16 +69,16 @@ impl<'a> Interpreter<'a> {
 		let operations: &'a [Operation] = operations.unwrap_or(self.operations);
 
 		for operation in operations {
-			if self.is_verbose {
-				println!("{:#?}", operation);
-			}
-
 			match operation {
 				Operation::MovePointer(value) => self.move_pointer(*value)?,
 				Operation::IncreaseValue(value) => self.increase_value(*value),
 				Operation::Output => self.output()?,
 				Operation::Input => self.input()?,
 				Operation::Jump(is_zero, operations) => self.jump(*is_zero, operations)?,
+			}
+
+			if self.is_verbose {
+				print!("\n{:?}\ncells[{:}] = {:}\n", operation, self.pointer, self.cells[self.pointer]);
 			}
 		}
 
